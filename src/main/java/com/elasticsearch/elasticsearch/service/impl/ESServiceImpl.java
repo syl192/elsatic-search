@@ -271,10 +271,14 @@ public class ESServiceImpl implements ESService<Object> {
                     rangeQueryBuilder = QueryBuilders.rangeQuery(next.getKey());
                     Map<String, String> value = next.getValue();
                     if (value.containsKey("start")) {
-                        rangeQueryBuilder.gte(value.get("start"));
+                        String start = value.get("start");
+                        if (StrUtil.isNotBlank(start))
+                            rangeQueryBuilder.gte(start);
                     }
                     if (value.containsKey("end")) {
-                        rangeQueryBuilder.lte(value.get("end"));
+                        String end = value.get("end");
+                        if (StrUtil.isNotBlank(end))
+                            rangeQueryBuilder.lte(end);
                     }
                     searchSourceBuilder.postFilter(rangeQueryBuilder);
                 }
