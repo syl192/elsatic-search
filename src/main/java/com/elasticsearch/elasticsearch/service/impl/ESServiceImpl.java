@@ -227,14 +227,13 @@ public class ESServiceImpl implements ESService<Object> {
 
     @Override
     public List<Map<String, Object>> textSearch(String indexName, String orderField, int current, int size, String fieldValue, String... fieldNames) {
-        current = (current - 1) * size;
         List<Map<String, Object>> result = new ArrayList<>();
         try {
             SearchRequest searchRequest = new SearchRequest();
             searchRequest.indices(indexName);
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
             searchSourceBuilder.query(QueryBuilders.multiMatchQuery(fieldValue, fieldNames));
-            searchSourceBuilder.from(current);
+            searchSourceBuilder.from((current - 1) * size);
             searchSourceBuilder.size(size);
             if (StrUtil.isNotBlank(orderField)) {
                 searchSourceBuilder.sort(new FieldSortBuilder(orderField).order(SortOrder.DESC)); //指定字段倒叙
@@ -254,7 +253,6 @@ public class ESServiceImpl implements ESService<Object> {
 
     @Override
     public List<Map<String, Object>> rangeMathQuery(String indexName, String orderField, int current, int size, List<Map<String, Map<String, String>>> maps, String fieldValue, String... fieldNames) {
-        current = (current - 1) * size;
         List<Map<String, Object>> result = new ArrayList<>();
         try {
             SearchRequest searchRequest = new SearchRequest();
@@ -276,7 +274,7 @@ public class ESServiceImpl implements ESService<Object> {
                     searchSourceBuilder.postFilter(rangeQueryBuilder);
                 }
             }
-            searchSourceBuilder.from(current);
+            searchSourceBuilder.from((current - 1) * size);
             searchSourceBuilder.size(size);
             if (StrUtil.isNotBlank(orderField)) {
                 searchSourceBuilder.sort(new FieldSortBuilder(orderField).order(SortOrder.DESC)); //指定字段倒叙
