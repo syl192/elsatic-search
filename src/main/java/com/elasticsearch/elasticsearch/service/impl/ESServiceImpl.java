@@ -25,7 +25,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
-import org.elasticsearch.client.CcrClient;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.core.CountRequest;
@@ -425,7 +424,6 @@ public class ESServiceImpl implements ESService<Object> {
             mapping.endObject().endObject();
             createIndexRequest.mapping(mapping);
             CreateIndexResponse createIndexResponse = restClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
-            CcrClient ccr = restClient.ccr();
             return createIndexResponse.isAcknowledged();
         } catch (IOException e) {
             log.error("\n根据信息自动创建索引与mapping创建失败，失败信息为:{}", e.getMessage());
